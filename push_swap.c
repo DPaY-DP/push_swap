@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+// #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -34,17 +34,55 @@ t_Node	*create_node(int data)
 void	insert_at_beginning(t_Node **head, int data)
 {
 	t_Node	*newt_node;
+    t_Node  *temp;
 
 	newt_node = create_node(data);
 	if (*head == NULL)
 	{
 		*head = newt_node;
+        newt_node->next = newt_node;
+        newt_node->prev = newt_node;
 		return ;
 	}
-	newt_node->next = *head;
-	newt_node->prev = NULL;
+    temp = (*head)->prev; //gets tail
+	newt_node->next = *head; // new node points to old head
+	newt_node->prev = temp; // old head points back to new node
 	(*head)->prev = newt_node;
-	*head = newt_node;
+    temp->next = newt_node; // tail points to new head
+	*head = newt_node; // new head
+}
+
+void rotate_a(t_Node **head)
+{
+    t_Node *first;
+    t_Node *second;
+    t_Node *last;
+
+    first = *head;
+    second = first->next;
+    last = first->prev;
+    first->prev = last;
+    last->next = first;
+    first->next = second;
+    second->prev = first;
+    *head = second;
+}
+
+void swap_a(t_Node **head)
+{
+    t_Node  *temp;
+    t_Node  *second;
+    t_Node  *tail;
+    
+    temp = *head; // temp new head
+    tail = (*head)->prev;
+    second = temp->next; // second is next after old head
+    temp->next = second->next; // head next is second next
+    second->next = temp; // 
+    *head = second;
+    temp->prev = second;
+    second->prev = tail;
+    tail->next = second;
 }
 
 void	print_list_forward(t_Node *head)
@@ -53,7 +91,9 @@ void	print_list_forward(t_Node *head)
 
 	temp = head;
 	printf("Forward List: ");
-	while (temp != NULL)
+    printf("%d ", temp->data);
+    temp = temp->next;
+	while (temp != head)
 	{
 		printf("%d ", temp->data);
 		temp = temp->next;
@@ -129,6 +169,16 @@ int	push_swap(int argc, char **argv)
 			insert_at_beginning(&head, ft_atoi(argv[i]));
 		}
 		print_list_forward(head);
+        swap_a(&head);
+        print_list_forward(head);
+        swap_a(&head);
+        print_list_forward(head);
+        rotate_a(&head);
+        print_list_forward(head);
+        rotate_a(&head);
+        print_list_forward(head);
+        swap_a(&head);
+        print_list_forward(head);
 	}
 	return (0);
 }
