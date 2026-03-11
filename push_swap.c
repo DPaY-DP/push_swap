@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/03/04 16:08:34 by dpfannen          #+#    #+#             */
-/*   Updated: 2026/03/04 17:18:42 by dpfannen         ###   ########.fr       */
+/*   Created: 2026/03/11 15:44:22 by dpfannen          #+#    #+#             */
+/*   Updated: 2026/03/11 17:43:24 by dpfannen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include <unistd.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -34,55 +34,183 @@ t_Node	*create_node(int data)
 void	insert_at_beginning(t_Node **head, int data)
 {
 	t_Node	*newt_node;
-    t_Node  *temp;
+	t_Node	*temp;
 
 	newt_node = create_node(data);
 	if (*head == NULL)
 	{
 		*head = newt_node;
-        newt_node->next = newt_node;
-        newt_node->prev = newt_node;
+		newt_node->next = newt_node;
+		newt_node->prev = newt_node;
 		return ;
 	}
-    temp = (*head)->prev; //gets tail
+	temp = (*head)->prev; //gets tail
 	newt_node->next = *head; // new node points to old head
 	newt_node->prev = temp; // old head points back to new node
 	(*head)->prev = newt_node;
-    temp->next = newt_node; // tail points to new head
+	temp->next = newt_node; // tail points to new head
 	*head = newt_node; // new head
 }
 
-void rotate_a(t_Node **head)
+void	rotate_stack(t_Node **head)
 {
-    t_Node *first;
-    t_Node *second;
-    t_Node *last;
+	t_Node	*first;
+	t_Node	*second;
+	t_Node	*last;
 
-    first = *head;
-    second = first->next;
-    last = first->prev;
-    first->prev = last;
-    last->next = first;
-    first->next = second;
-    second->prev = first;
-    *head = second;
+	first = *head;
+	second = first->next;
+	last = first->prev;
+	first->prev = last;
+	last->next = first;
+	first->next = second;
+	second->prev = first;
+	*head = second;
 }
 
-void swap_a(t_Node **head)
+void	rotate_a(t_Node **a)
 {
-    t_Node  *temp;
-    t_Node  *second;
-    t_Node  *tail;
-    
-    temp = *head; // temp new head
-    tail = (*head)->prev;
-    second = temp->next; // second is next after old head
-    temp->next = second->next; // head next is second next
-    second->next = temp; // 
-    *head = second;
-    temp->prev = second;
-    second->prev = tail;
-    tail->next = second;
+	rotate_stack(a);
+}
+
+void	rotate_b(t_Node **b)
+{
+	rotate_stack(b);
+}
+
+void	reverse_rotate_stack(t_Node **head)
+{
+	t_Node	*first;
+	t_Node	*second;
+	t_Node	*last;
+
+	first = *head;
+	second = first->next;
+	last = first->prev;
+	if (second == last)
+	{
+		*head = second;
+		return ;
+	}
+	else
+	{
+	*head = last;
+	last->next = first;
+	first->prev = last;
+	first->next = second;
+	second->prev = first;
+	}
+}
+
+void	reverse_rotate_a(t_Node **a)
+{
+	reverse_rotate_stack(a);
+}
+
+void	reverse_rotate_b(t_Node **b)
+{
+	reverse_rotate_stack(b);
+}
+
+void	attach_top(t_Node **dst, t_Node *node)
+{
+	t_Node	*dst_head;
+	t_Node	*dst_tail;
+
+	dst_head = *dst;
+	if (dst_head == NULL)
+	{
+		node->next = node;
+		node->prev = node;
+	}
+	else
+	{
+		dst_tail = dst_head->prev;
+		node->next = dst_head;
+		dst_head->prev = node;
+		dst_tail->next = node;
+		node->prev = dst_tail;
+	}
+}
+
+t_Node	*detach_top(t_Node **src)
+{
+	t_Node	*src_head;
+	t_Node	*src_first;
+	t_Node	*src_tail;
+
+	src_head = *src;
+	if (src_head == NULL)
+		return (NULL);
+	src_first = src_head->next;
+	src_tail = src_head->prev;
+	src_first->prev = src_tail;
+	src_tail->next = src_first;
+	if (src_head == src_first)
+		*src = NULL;
+	else
+		*src = src_first;
+	return (src_head);
+}
+
+void	push_stack(t_Node **src, t_Node **dst)
+{
+	t_Node	*src_head;
+	t_Node	*dst_head;
+	
+	if (*src == NULL)
+		return ;
+	dst_head = *dst;
+	src_head = detach_top(src);
+	if (src_head == NULL)
+		return ;
+	attach_top(dst, src_head);
+	*dst = src_head;
+}
+
+void	push_b(t_Node **a, t_Node **b)
+{
+	push_stack(a, b);
+}
+
+void	push_a(t_Node **a, t_Node **b)
+{
+	push_stack(b, a);
+}
+
+void	swap_stack(t_Node **head)
+{
+	t_Node	*temp;
+	t_Node	*second;
+	t_Node	*tail;
+
+	temp = *head; // temp new head
+	tail = (*head)->prev;
+	second = temp->next; // second is next after old head
+	if (tail == second)
+	{
+		*head = second;
+		return ;
+	}
+	else
+	{
+	temp->next = second->next; // head next is second next
+	second->next = temp; // 
+	*head = second;
+	temp->prev = second;
+	second->prev = tail;
+	tail->next = second;
+	}
+}
+
+void	swap_a(t_Node **a)
+{
+	swap_stack(a);
+}
+
+void	swap_b(t_Node **b)
+{
+	swap_stack(b);
 }
 
 void	print_list_forward(t_Node *head)
@@ -91,13 +219,18 @@ void	print_list_forward(t_Node *head)
 
 	temp = head;
 	printf("Forward List: ");
-    printf("%d ", temp->data);
-    temp = temp->next;
-	while (temp != head)
+	if (temp != NULL)
 	{
 		printf("%d ", temp->data);
 		temp = temp->next;
+		while (temp != head)
+		{
+			printf("%d ", temp->data);
+			temp = temp->next;
+		}
 	}
+	else
+		printf("");
 	printf("\n");
 }
 
@@ -147,11 +280,34 @@ char	is_valid_input(char *c)
 	return (1);
 }
 
+void	free_all(t_Node **head)
+{
+	t_Node	*temp;
+	t_Node	*start;
+	
+	start = *head;
+	if (head == NULL)
+		return;
+	if (start == NULL)
+		return ;
+	temp = (*head)->next;
+	free(*head);
+	while (temp != start)
+	{
+		*head = temp;
+		temp = (*head)->next;
+		free(*head);
+	}
+	*head = NULL;
+}
+
 int	push_swap(int argc, char **argv)
 {
-	t_Node	*head;
+	t_Node	*a;
+	t_Node	*b;
 
-	head = NULL;
+	a = NULL;
+	b = NULL;
 	if (argc < 2)
 		return (0);
 	if (argc == 2)
@@ -166,20 +322,39 @@ int	push_swap(int argc, char **argv)
 		{
 			if (is_valid_input(argv[i]) == 0)
 				return (write(1, "Error", 5));
-			insert_at_beginning(&head, ft_atoi(argv[i]));
+			insert_at_beginning(&a, ft_atoi(argv[i]));
 		}
-		print_list_forward(head);
-        swap_a(&head);
-        print_list_forward(head);
-        swap_a(&head);
-        print_list_forward(head);
-        rotate_a(&head);
-        print_list_forward(head);
-        rotate_a(&head);
-        print_list_forward(head);
-        swap_a(&head);
-        print_list_forward(head);
+		print_list_forward(a);
+		for (int i = 0; i < 2; i++)
+		{
+			push_b(&a, &b);
+			print_list_forward(a);
+			printf("b_ ");
+			print_list_forward(b);
+			// print_list_forward(a);
+			// reverse_rotate_a(&a);
+		}
+		// print_list_forward(head);
+		swap_a(&a);
+		print_list_forward(a);
+		print_list_forward(b);
+		swap_b(&b);
+		print_list_forward(a);
+		print_list_forward(b);
+		// swap_a(&head);
+		// print_list_forward(head);
+		// rotate_a(&head);
+		// print_list_forward(head);
+		// rotate_a(&head);
+		// print_list_forward(head);
+		// swap_a(&head);
+		// print_list_forward(head);
+		
 	}
+	free_all(&a);
+	free_all(&b);
+	free(a);
+	free(b);
 	return (0);
 }
 
