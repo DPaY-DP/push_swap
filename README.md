@@ -37,3 +37,4 @@ rra and rrb at the same time.
 # Instructions
 
 # Resources
+- https://www.geeksforgeeks.org/c/doubly-linked-list-in-c/
