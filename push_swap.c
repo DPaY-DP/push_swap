@@ -6,7 +6,7 @@
 /*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 15:44:22 by dpfannen          #+#    #+#             */
-/*   Updated: 2026/03/11 17:43:24 by dpfannen         ###   ########.fr       */
+/*   Updated: 2026/03/12 15:43:25 by dpfannen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,22 +283,96 @@ char	is_valid_input(char *c)
 void	free_all(t_Node **head)
 {
 	t_Node	*temp;
-	t_Node	*start;
-	
-	start = *head;
+	t_Node	*last;
+
 	if (head == NULL)
 		return;
-	if (start == NULL)
+	if (*head == NULL)
 		return ;
+	last = (*head)->prev;
+	if (last == *head)
+	{
+		free(*head);
+		*head = NULL;
+		return ;
+	}
+	last->next = NULL;
 	temp = (*head)->next;
 	free(*head);
-	while (temp != start)
+	while (temp != NULL)
 	{
 		*head = temp;
 		temp = (*head)->next;
 		free(*head);
 	}
 	*head = NULL;
+}
+
+void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
+{
+	t_Node	*start_a;
+	// t_Node	*start_b;
+	t_Node	*current;
+	int		max_value;
+	int		i;
+	int		max_index;
+
+	max_index = 0;
+	i = 0;
+	// count_b = 0;
+	start_a = *a;
+	current = start_a->next;
+	max_value = start_a->data;
+	// start_b = *b;
+	if (number_given <= 5)
+	{
+		while (i > -1)
+		{
+			while (current != start_a)
+			{
+				if (current->data > max_value)
+				{
+					max_value = current->data;
+					max_index++;
+				}
+				current = current->next;
+				i++;
+				
+				// while (current->data > start_a->next->data)
+				// {
+				// 	rotate_a(a);
+				// 	start_a = *a;
+				// 	printf("test\n");
+				// 	print_list_forward(*a);
+				// 	print_list_forward(*b);
+				// 	printf("------------\n");
+				// }
+				// push_b(a, b);
+				// print_list_forward(*a);
+				// print_list_forward(*b);
+				// printf("------------\n");
+			}
+			if (max_index <= i / 2)
+			{
+				while (max_index > 0)
+				{
+					rotate_a(a);
+					max_index--;
+				}
+				push_b(a, b);
+			}
+			else
+			{
+				while (i - max_index > 0)
+				{
+					reverse_rotate_a(a);
+					max_index--;
+				}
+				push_b(a, b);
+			}
+			i--;
+		}
+	}
 }
 
 int	push_swap(int argc, char **argv)
@@ -324,23 +398,25 @@ int	push_swap(int argc, char **argv)
 				return (write(1, "Error", 5));
 			insert_at_beginning(&a, ft_atoi(argv[i]));
 		}
-		print_list_forward(a);
-		for (int i = 0; i < 2; i++)
-		{
-			push_b(&a, &b);
-			print_list_forward(a);
-			printf("b_ ");
-			print_list_forward(b);
-			// print_list_forward(a);
-			// reverse_rotate_a(&a);
-		}
-		// print_list_forward(head);
-		swap_a(&a);
+		sort_algorithm(&a, &b, argc);
 		print_list_forward(a);
 		print_list_forward(b);
-		swap_b(&b);
-		print_list_forward(a);
-		print_list_forward(b);
+		// for (int i = 0; i < 2; i++)
+		// {
+		// 	push_b(&a, &b);
+		// 	print_list_forward(a);
+		// 	printf("b_ ");
+		// 	print_list_forward(b);
+		// 	// print_list_forward(a);
+		// 	// reverse_rotate_a(&a);
+		// }
+		// // print_list_forward(head);
+		// swap_a(&a);
+		// print_list_forward(a);
+		// print_list_forward(b);
+		// swap_b(&b);
+		// print_list_forward(a);
+		// print_list_forward(b);
 		// swap_a(&head);
 		// print_list_forward(head);
 		// rotate_a(&head);
@@ -353,8 +429,6 @@ int	push_swap(int argc, char **argv)
 	}
 	free_all(&a);
 	free_all(&b);
-	free(a);
-	free(b);
 	return (0);
 }
 
