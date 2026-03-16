@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+// #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -44,12 +44,19 @@ void	insert_at_beginning(t_Node **head, int data)
 		newt_node->prev = newt_node;
 		return ;
 	}
-	temp = (*head)->prev; //gets tail
-	newt_node->next = *head; // new node points to old head
-	newt_node->prev = temp; // old head points back to new node
+	temp = *head;
+	while (temp->next != (*head))
+		temp = temp->next;
+	temp->next = newt_node;
+	newt_node->prev = temp;
+	newt_node->next = *head;
 	(*head)->prev = newt_node;
-	temp->next = newt_node; // tail points to new head
-	*head = newt_node; // new head
+	// temp = (*head)->prev; //gets tail
+	// newt_node->next = *head; // new node points to old head
+	// newt_node->prev = temp; // old head points back to new node
+	// (*head)->prev = newt_node;
+	// temp->next = newt_node; // tail points to new head
+	// *head = newt_node; // new head
 }
 
 void	rotate_stack(t_Node **head)
@@ -71,11 +78,13 @@ void	rotate_stack(t_Node **head)
 void	rotate_a(t_Node **a)
 {
 	rotate_stack(a);
+	write(1, "ra\n", 3);
 }
 
 void	rotate_b(t_Node **b)
 {
 	rotate_stack(b);
+	write(1, "rb\n", 3);
 }
 
 void	reverse_rotate_stack(t_Node **head)
@@ -105,11 +114,13 @@ void	reverse_rotate_stack(t_Node **head)
 void	reverse_rotate_a(t_Node **a)
 {
 	reverse_rotate_stack(a);
+	write(1, "rra\n", 4);
 }
 
 void	reverse_rotate_b(t_Node **b)
 {
 	reverse_rotate_stack(b);
+	write(1, "rrb\n", 4);
 }
 
 void	attach_top(t_Node **dst, t_Node *node)
@@ -171,11 +182,13 @@ void	push_stack(t_Node **src, t_Node **dst)
 void	push_b(t_Node **a, t_Node **b)
 {
 	push_stack(a, b);
+	write(1, "pb\n", 3);
 }
 
 void	push_a(t_Node **a, t_Node **b)
 {
 	push_stack(b, a);
+	write(1, "pa\n", 3);
 }
 
 void	swap_stack(t_Node **head)
@@ -206,11 +219,13 @@ void	swap_stack(t_Node **head)
 void	swap_a(t_Node **a)
 {
 	swap_stack(a);
+	write(1, "sa\n", 3);
 }
 
 void	swap_b(t_Node **b)
 {
 	swap_stack(b);
+	write(1, "sb\n", 3);
 }
 
 void	print_list_forward(t_Node *head)
@@ -325,9 +340,9 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 	start_a = *a;
 	current = start_a->next;
 	min_value = start_a->data;
-	print_list_forward(*a);
+	// print_list_forward(*a);
 	// start_b = *b;
-	if (number_given <= 5)
+	if (number_given <= 300)
 	{
 		while (lenght_a > 0)
 		{
@@ -337,6 +352,7 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 				{
 					min_value = current->data;
 					pos = max_index;
+					max_index++;
 				}
 				else
 					max_index++;
@@ -355,53 +371,53 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 				// print_list_forward(*a);
 				// print_list_forward(*b);
 				// printf("------------\n");
-				printf("toamte\n");
+				// printf("toamte\n");
 			}
-			printf("%d index\n",	max_index);
-			printf("%d test lenght\n", lenght_a);
+			// printf("%d index\n",	max_index);
+			// printf("%d pos\n", pos);
+			// printf("%d test lenght\n", lenght_a);
 			if 	((pos <= (lenght_a / 2)))
 			{
-				printf("rotate");
-				while 	(max_index > 0)
+				// printf("rotate ");
+				while 	(pos > 0)
 				{
 					rotate_a(a);
-					max_index--;
+					pos--;
 				}
 				push_b(a, b);
 				start_a = *a;
 				if (start_a != NULL)
 					{current = start_a->next;
 					min_value = start_a->data;}
-				print_list_forward(*a);
-				print_list_forward(*b);
-				printf("\n");
-				max_index = 1;
+				// print_list_forward(*a);
+				// print_list_forward(*b);
+				// printf("\n");
 			}
 			else
 			{
-				printf("reverse");
-				while (lenght_a - max_index < 0)
+				// printf("reverse ");
+				while (pos < lenght_a)
 				{
 					reverse_rotate_a(a);
-					max_index--;
+					pos++;
 				}
 				push_b(a, b);
 				start_a = *a;
 				if (start_a != NULL)
 					{current = start_a->next;
 					min_value = start_a->data;}
-				print_list_forward(*a);
-				print_list_forward(*b);
-				printf("\n");
-				max_index = 1;
+				// print_list_forward(*a);
+				// print_list_forward(*b);
+				// printf("\n");
 			}
+			max_index = 1;
 			lenght_a--;
-			printf("%d true lenght\n", lenght_a);
-			printf("banane\n");
+			// printf("%d true lenght\n", lenght_a);
+			// printf("banane\n");
 		}
 	}
-	printf("%d test test\n", lenght_a);
-	printf("%d",	max_index);
+	// printf("%d test test\n", lenght_a);
+	// printf("%d",	max_index);
 }
 
 int	push_swap(int argc, char **argv)
@@ -428,9 +444,13 @@ int	push_swap(int argc, char **argv)
 			insert_at_beginning(&a, ft_atoi(argv[i]));
 		}
 		sort_algorithm(&a, &b, (argc - 1));
-		printf("gurke");
-		print_list_forward(a);
-		print_list_forward(b);
+		while (b != NULL)
+		{
+			push_a(&a, &b);
+		}
+		// printf("gurke");
+		// print_list_forward(a);
+		// print_list_forward(b);
 		// for (int i = 0; i < 2; i++)
 		// {
 		// 	push_b(&a, &b);
