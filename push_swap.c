@@ -6,7 +6,7 @@
 /*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 15:44:22 by dpfannen          #+#    #+#             */
-/*   Updated: 2026/03/12 15:43:25 by dpfannen         ###   ########.fr       */
+/*   Updated: 2026/03/16 13:42:38 by dpfannen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,30 +313,34 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 	t_Node	*start_a;
 	// t_Node	*start_b;
 	t_Node	*current;
-	int		max_value;
-	int		i;
+	int		min_value;
+	int		lenght_a;
 	int		max_index;
+	int		pos;
 
-	max_index = 0;
-	i = 0;
+	max_index = 1;
+	pos = 0;
+	lenght_a = number_given;
 	// count_b = 0;
 	start_a = *a;
 	current = start_a->next;
-	max_value = start_a->data;
+	min_value = start_a->data;
+	print_list_forward(*a);
 	// start_b = *b;
 	if (number_given <= 5)
 	{
-		while (i > -1)
+		while (lenght_a > 0)
 		{
-			while (current != start_a)
+			while (current != start_a && start_a != NULL)
 			{
-				if (current->data > max_value)
+				if (current->data <	min_value)
 				{
-					max_value = current->data;
-					max_index++;
+					min_value = current->data;
+					pos = max_index;
 				}
+				else
+					max_index++;
 				current = current->next;
-				i++;
 				
 				// while (current->data > start_a->next->data)
 				// {
@@ -351,28 +355,53 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 				// print_list_forward(*a);
 				// print_list_forward(*b);
 				// printf("------------\n");
+				printf("toamte\n");
 			}
-			if (max_index <= i / 2)
+			printf("%d index\n",	max_index);
+			printf("%d test lenght\n", lenght_a);
+			if 	((pos <= (lenght_a / 2)))
 			{
-				while (max_index > 0)
+				printf("rotate");
+				while 	(max_index > 0)
 				{
 					rotate_a(a);
 					max_index--;
 				}
 				push_b(a, b);
+				start_a = *a;
+				if (start_a != NULL)
+					{current = start_a->next;
+					min_value = start_a->data;}
+				print_list_forward(*a);
+				print_list_forward(*b);
+				printf("\n");
+				max_index = 1;
 			}
 			else
 			{
-				while (i - max_index > 0)
+				printf("reverse");
+				while (lenght_a - max_index < 0)
 				{
 					reverse_rotate_a(a);
 					max_index--;
 				}
 				push_b(a, b);
+				start_a = *a;
+				if (start_a != NULL)
+					{current = start_a->next;
+					min_value = start_a->data;}
+				print_list_forward(*a);
+				print_list_forward(*b);
+				printf("\n");
+				max_index = 1;
 			}
-			i--;
+			lenght_a--;
+			printf("%d true lenght\n", lenght_a);
+			printf("banane\n");
 		}
 	}
+	printf("%d test test\n", lenght_a);
+	printf("%d",	max_index);
 }
 
 int	push_swap(int argc, char **argv)
@@ -398,7 +427,8 @@ int	push_swap(int argc, char **argv)
 				return (write(1, "Error", 5));
 			insert_at_beginning(&a, ft_atoi(argv[i]));
 		}
-		sort_algorithm(&a, &b, argc);
+		sort_algorithm(&a, &b, (argc - 1));
+		printf("gurke");
 		print_list_forward(a);
 		print_list_forward(b);
 		// for (int i = 0; i < 2; i++)
