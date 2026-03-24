@@ -6,11 +6,11 @@
 /*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 15:44:22 by dpfannen          #+#    #+#             */
-/*   Updated: 2026/03/16 13:42:38 by dpfannen         ###   ########.fr       */
+/*   Updated: 2026/03/24 18:26:23 by dpfannen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include <unistd.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -31,7 +31,7 @@ t_Node	*create_node(int data)
 	return (newt_node);
 }
 
-void	insert_at_beginning(t_Node **head, int data)
+void	insert_at_end(t_Node **head, int data)
 {
 	t_Node	*newt_node;
 	t_Node	*temp;
@@ -65,6 +65,8 @@ void	rotate_stack(t_Node **head)
 	t_Node	*second;
 	t_Node	*last;
 
+	if (head == NULL || *head == NULL || (*head)->next == *head)
+		return ;
 	first = *head;
 	second = first->next;
 	last = first->prev;
@@ -93,6 +95,8 @@ void	reverse_rotate_stack(t_Node **head)
 	t_Node	*second;
 	t_Node	*last;
 
+	if (head == NULL || *head == NULL || (*head)->next == *head)
+		return ;
 	first = *head;
 	second = first->next;
 	last = first->prev;
@@ -197,6 +201,8 @@ void	swap_stack(t_Node **head)
 	t_Node	*second;
 	t_Node	*tail;
 
+	if (head == NULL || *head == NULL || (*head)->next == *head)
+		return ;
 	temp = *head; // temp new head
 	tail = (*head)->prev;
 	second = temp->next; // second is next after old head
@@ -245,7 +251,7 @@ void	print_list_forward(t_Node *head)
 		}
 	}
 	else
-		printf("");
+		printf(" ");
 	printf("\n");
 }
 
@@ -323,6 +329,158 @@ void	free_all(t_Node **head)
 	*head = NULL;
 }
 
+int	is_sorted(t_Node **a)
+{
+	t_Node	*current;
+	t_Node	*head;
+
+	if (a == NULL || *a == NULL)
+		return (1);
+	head = *a;
+	current = head;
+	while (current->next != head)
+	{
+		if (current->data < current->next->data)
+			current = current->next;
+		else
+			return (2);
+	}
+	return (1);
+}
+
+int	is_sorted_descend(t_Node **a)
+{
+	t_Node	*current;
+	t_Node	*head;
+
+	if (a == NULL || *a == NULL)
+		return (1);
+	head = *a;
+	current = head;
+	while (current->next != head)
+	{
+		if (current->data > current->next->data)
+			current = current->next;
+		else
+			return (2);
+	}
+	return (1);
+}
+
+void	sort_algorithm_push_five(t_Node **a, t_Node **b)
+{
+	t_Node	*head;
+	t_Node	*current;
+	int		min_value;
+	int		pos;
+	int		current_index;
+
+	head = *a;
+	current = head->next;
+	min_value = head->data;
+	pos = 0;
+	current_index = 0;
+	while (current_index < 5)
+	{
+		if (current->data < min_value)
+			{
+				swap_a(a);
+
+				push_b(a, b);
+			}
+		else
+			push_b(a, b);
+		head = *a;
+		current = head->next;
+		min_value = head->data;
+		current_index++;
+	}
+	while (current_index > 0)
+	{
+		push_a(a, b);
+		current_index--;
+	}
+	
+	if (is_sorted(a) == 1)
+		return
+	// rotate_a(a);
+	// rotate_a(a);
+	sort_algorithm_push_five(a, b);
+}
+int	find_position_small(t_Node **stack, int max_index, int min_value)
+{
+	t_Node	*current;
+	t_Node	*start;
+	int		pos;
+
+	start = *stack;
+	current = start->next;
+	pos = 0;
+	while (current != start && start != NULL)
+		{
+			if (current->data <	min_value)
+			{
+				min_value = current->data;
+				pos = max_index;
+				max_index++;
+			}
+			else
+				max_index++;
+			current = current->next;
+		}
+	return (pos);
+}
+
+int	find_position_big(t_Node **stack, int min_value)
+{
+	t_Node	*current;
+	t_Node	*start;
+	int		pos;
+	int		best_pos;
+	int		max_val;
+	int		best_val;
+	int		has_best;
+	int		max_index;
+
+	if (stack == NULL || *stack == NULL)
+		return (0);
+	start = *stack;
+	current = start;
+	best_pos = -1;
+	pos = 0;
+	max_val = start->data;
+	// best_val = 0;
+	has_best = 0;
+	max_index = 1;
+	if (current->data <	min_value && ((!has_best) || current->data > best_val))
+			{
+				best_val = start->data;
+				best_pos = 0;
+				has_best = 1;
+			}
+	current = current->next;
+	while (current != start)
+		{
+			if (current->data > max_val)
+			{
+				max_val = current->data;
+				pos = max_index;
+			}
+			if (current->data <	min_value && ((!has_best) || current->data > best_val))
+			{
+				best_val = current->data;
+				best_pos = max_index;
+				has_best = 1;
+			}
+			max_index++;
+			current = current->next;
+		}
+	if (has_best == 1)
+		return (best_pos);
+	return (pos);
+}
+
+
 void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 {
 	t_Node	*start_a;
@@ -342,11 +500,11 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 	min_value = start_a->data;
 	// print_list_forward(*a);
 	// start_b = *b;
-	if (number_given <= 300)
+	if (number_given <= 500)
 	{
 		while (lenght_a > 0)
 		{
-			while (current != start_a && start_a != NULL)
+			while (current != start_a && start_a != NULL && max_index < 11)
 			{
 				if (current->data <	min_value)
 				{
@@ -357,33 +515,31 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 				else
 					max_index++;
 				current = current->next;
-				
-				// while (current->data > start_a->next->data)
-				// {
-				// 	rotate_a(a);
-				// 	start_a = *a;
-				// 	printf("test\n");
-				// 	print_list_forward(*a);
-				// 	print_list_forward(*b);
-				// 	printf("------------\n");
-				// }
-				// push_b(a, b);
-				// print_list_forward(*a);
-				// print_list_forward(*b);
-				// printf("------------\n");
-				// printf("toamte\n");
 			}
-			// printf("%d index\n",	max_index);
-			// printf("%d pos\n", pos);
-			// printf("%d test lenght\n", lenght_a);
 			if 	((pos <= (lenght_a / 2)))
 			{
-				// printf("rotate ");
+				// printf("rotate \n");
 				while 	(pos > 0)
 				{
 					rotate_a(a);
 					pos--;
 				}
+				if (lenght_a != number_given)
+					{
+						// printf("\n");
+						pos = find_position_big(b, min_value);
+						// printf("%d", pos);
+						if (pos <= ((number_given - lenght_a)/2))
+							{
+								while (pos-- > 0)
+									rotate_b(b);
+							}
+						else{
+								pos = (number_given - lenght_a) - pos;
+								while(pos-- > 0)
+									reverse_rotate_b(b);
+							}
+					}
 				push_b(a, b);
 				start_a = *a;
 				if (start_a != NULL)
@@ -401,6 +557,21 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 					reverse_rotate_a(a);
 					pos++;
 				}
+				if (lenght_a != number_given)
+					{
+						pos = find_position_big(b, min_value);
+						// printf("%d", pos);
+						if (pos <= ((number_given - lenght_a)/2))
+							{
+								while (pos-- > 0)
+									rotate_b(b);
+							}
+						else{
+								pos = (number_given - lenght_a) - pos;
+								while(pos-- > 0)
+									reverse_rotate_b(b);
+							}
+					}
 				push_b(a, b);
 				start_a = *a;
 				if (start_a != NULL)
@@ -410,8 +581,48 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 				// print_list_forward(*b);
 				// printf("\n");
 			}
-			max_index = 1;
+			if (is_sorted(a) == 1)
+				if (is_sorted_descend(b) == 1)
+					return ;
 			lenght_a--;
+				// max_index = pos;
+					// swap_b(b);
+			// if (is_sorted(b) == 2)
+			// {
+			// 				// if ((*b)->data < (*b)->next->data)
+			// 				// {
+			// 				if (number_given - lenght_a > 3)
+			// 					{pos = find_position_big(b, 1, (*b)->data);
+			// 					if (pos == 1)
+			// 						swap_b(b);}
+			// 			// 	if (is_sorted_descend(b) == 2)
+			// 			// 		{
+			// 			// // 			pos = find_position_small(b, 1, (*b)->data);
+			// 			// // 			if (pos <= ((number_given - lenght_a)/2))
+			// 			// // 				{
+			// 			// // 					while ((pos + 1) > 0)
+			// 			// // 					{
+			// 			// // 						rotate_b(b);
+			// 			// // 						// if ((*b)->data < (*b)->next->data)
+			// 			// // 						// 	swap_b(b);
+			// 			// // 						pos--;
+			// 			// // 					}
+			// 			// // 				}
+			// 			// // 			else{
+			// 			// // 					while((pos - 1) < (number_given - lenght_a))
+			// 			// // 					{
+			// 			// // 						reverse_rotate_b(b);
+			// 			// // 						// if ((*b)->data < (*b)->next->data)
+			// 			// // 						// 	swap_b(b);
+			// 			// // 						pos++;
+			// 			// // 					}
+			// 			// // 				}
+			// 			// // 		// }
+			// 			// // }
+									
+			// 			// 		}
+			// }
+			max_index = 1;
 			// printf("%d true lenght\n", lenght_a);
 			// printf("banane\n");
 		}
@@ -441,9 +652,13 @@ int	push_swap(int argc, char **argv)
 		{
 			if (is_valid_input(argv[i]) == 0)
 				return (write(1, "Error", 5));
-			insert_at_beginning(&a, ft_atoi(argv[i]));
+			insert_at_end(&a, ft_atoi(argv[i]));
 		}
+		// sort_algorithm_push_five(&a, &b);
+		// print_list_forward(a);
+		// print_list_forward(b);
 		sort_algorithm(&a, &b, (argc - 1));
+		// print_list_forward(b);
 		while (b != NULL)
 		{
 			push_a(&a, &b);
@@ -477,6 +692,8 @@ int	push_swap(int argc, char **argv)
 		// print_list_forward(head);
 		
 	}
+	if (is_sorted(&a) == 1)
+		printf("sortiert");
 	free_all(&a);
 	free_all(&b);
 	return (0);
