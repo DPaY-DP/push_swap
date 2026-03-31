@@ -89,6 +89,13 @@ void	rotate_b(t_Node **b)
 	write(1, "rb\n", 3);
 }
 
+void	rotate_both(t_Node **a, t_Node **b)
+{
+	rotate_stack(a);
+	rotate_stack(b);
+	write(1, "rr\n", 3);
+}
+
 void	reverse_rotate_stack(t_Node **head)
 {
 	t_Node	*first;
@@ -125,6 +132,13 @@ void	reverse_rotate_b(t_Node **b)
 {
 	reverse_rotate_stack(b);
 	write(1, "rrb\n", 4);
+}
+
+void	reverse_rotate_both(t_Node **a, t_Node **b)
+{
+	reverse_rotate_stack(a);
+	reverse_rotate_stack(b);
+	write(1, "rrr\n", 4);
 }
 
 void	attach_top(t_Node **dst, t_Node *node)
@@ -171,11 +185,9 @@ t_Node	*detach_top(t_Node **src)
 void	push_stack(t_Node **src, t_Node **dst)
 {
 	t_Node	*src_head;
-	t_Node	*dst_head;
 	
 	if (*src == NULL)
 		return ;
-	dst_head = *dst;
 	src_head = detach_top(src);
 	if (src_head == NULL)
 		return ;
@@ -255,11 +267,11 @@ void	print_list_forward(t_Node *head)
 	printf("\n");
 }
 
-int	ft_atoi(const char *str)
+long int	ft_atoi(const char *str)
 {
-	int	i;
-	int	nbr;
-	int	sign;
+	int			i;
+	long int	nbr;
+	int			sign;
 
 	i = 0;
 	nbr = 0;
@@ -284,9 +296,11 @@ int	ft_atoi(const char *str)
 
 char	is_valid_input(char *c)
 {
-	int	i;
+	long int	i;
 
 	i = 0;
+	if (!c || c[0] == '\0' || ((c[0] == '-' || c[0] == '+') && c[1] == '\0'))
+		return (0);
 	while (c[i])
 	{
 		if ((c[i] == '-' && i == 0) || (c[i] == '+' && i == 0))
@@ -298,6 +312,10 @@ char	is_valid_input(char *c)
 			return (0);
 		i++;
 	}
+	i = ft_atoi(c);
+	// printf("%ld", i);
+	if (i > 2147483647 || i < -2147483648)
+		return (0);
 	return (1);
 }
 
@@ -367,46 +385,6 @@ int	is_sorted_descend(t_Node **a)
 	return (1);
 }
 
-void	sort_algorithm_push_five(t_Node **a, t_Node **b)
-{
-	t_Node	*head;
-	t_Node	*current;
-	int		min_value;
-	int		pos;
-	int		current_index;
-
-	head = *a;
-	current = head->next;
-	min_value = head->data;
-	pos = 0;
-	current_index = 0;
-	while (current_index < 5)
-	{
-		if (current->data < min_value)
-			{
-				swap_a(a);
-
-				push_b(a, b);
-			}
-		else
-			push_b(a, b);
-		head = *a;
-		current = head->next;
-		min_value = head->data;
-		current_index++;
-	}
-	while (current_index > 0)
-	{
-		push_a(a, b);
-		current_index--;
-	}
-	
-	if (is_sorted(a) == 1)
-		return
-	// rotate_a(a);
-	// rotate_a(a);
-	sort_algorithm_push_five(a, b);
-}
 int	find_position_small(t_Node **stack, int max_index, int min_value)
 {
 	t_Node	*current;
@@ -416,7 +394,7 @@ int	find_position_small(t_Node **stack, int max_index, int min_value)
 	start = *stack;
 	current = start->next;
 	pos = 0;
-	while (current != start && start != NULL)
+	while (current != start && start != NULL && max_index < 11)
 		{
 			if (current->data <	min_value)
 			{
@@ -449,7 +427,7 @@ int	find_position_big(t_Node **stack, int min_value)
 	best_pos = -1;
 	pos = 0;
 	max_val = start->data;
-	// best_val = 0;
+	best_val = 0;
 	has_best = 0;
 	max_index = 1;
 	if (current->data <	min_value && ((!has_best) || current->data > best_val))
@@ -479,163 +457,186 @@ int	find_position_big(t_Node **stack, int min_value)
 		return (best_pos);
 	return (pos);
 }
+void	sort_tiny(t_Node **a, int stack_lenght)
+{
+	int		highest_pos;
+	int		sorted;
 
-
+	sorted = is_sorted(a);
+	if (sorted == 1)
+		return ;
+	if (stack_lenght == 2)
+		return (swap_a(a));
+	highest_pos = find_position_big(a, -2147483648);
+	if (highest_pos == 0)
+		rotate_a(a);
+	else if (highest_pos == 1)
+		reverse_rotate_a(a);
+	if ((*a)->data > (*a)->next->data)
+		swap_a(a);
+}
 void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 {
 	t_Node	*start_a;
-	// t_Node	*start_b;
 	t_Node	*current;
 	int		min_value;
 	int		lenght_a;
 	int		max_index;
 	int		pos;
+	int		reverse_pos;
+	int		best_direction;
 
+	reverse_pos = 0;
 	max_index = 1;
 	pos = 0;
 	lenght_a = number_given;
-	// count_b = 0;
 	start_a = *a;
 	current = start_a->next;
 	min_value = start_a->data;
-	// print_list_forward(*a);
-	// start_b = *b;
-	if (number_given <= 500)
+	best_direction = 1;
+	if (number_given < 4)
+		sort_tiny(a, number_given);
+	else
 	{
 		while (lenght_a > 0)
 		{
+			// while (current != start_a && start_a != NULL && max_index < 11)
+			// {
+			// 	if (current->data <	min_value)
+			// 	{
+			// 		best_direction = 1;
+			// 		min_value = current->data;
+			// 		pos = max_index;
+			// 		max_index++;
+			// 	}
+			// 	else
+			// 		max_index++;
+			// 	current = current->next;
+			// }
+			pos = find_position_small(a, max_index, min_value);
+			max_index = 1;
+			current = start_a->prev;
 			while (current != start_a && start_a != NULL && max_index < 11)
 			{
 				if (current->data <	min_value)
 				{
+					best_direction = 2;
 					min_value = current->data;
-					pos = max_index;
+					reverse_pos = max_index;
 					max_index++;
 				}
 				else
 					max_index++;
-				current = current->next;
+				current = current->prev;
 			}
-			if 	((pos <= (lenght_a / 2)))
+			if 	((best_direction == 1))
 			{
-				// printf("rotate \n");
-				while 	(pos > 0)
-				{
-					rotate_a(a);
-					pos--;
-				}
 				if (lenght_a != number_given)
+					max_index = find_position_big(b, min_value);
+				if (max_index <= ((number_given - lenght_a)/2))
+				{
+					while (max_index > 0 && pos > 0)
+						{
+							rotate_both(a, b);
+							pos--;
+							max_index--;
+						}
+					while 	(pos > 0)
 					{
-						// printf("\n");
-						pos = find_position_big(b, min_value);
-						// printf("%d", pos);
-						if (pos <= ((number_given - lenght_a)/2))
-							{
-								while (pos-- > 0)
-									rotate_b(b);
-							}
-						else{
-								pos = (number_given - lenght_a) - pos;
-								while(pos-- > 0)
-									reverse_rotate_b(b);
-							}
+						rotate_a(a);
+						pos--;
 					}
+					while (max_index-- > 0)
+						rotate_b(b);
+				}
+				else{
+					max_index = (number_given - lenght_a) - max_index;
+					while(max_index-- > 0)
+						reverse_rotate_b(b);
+					while 	(pos > 0)
+					{
+						rotate_a(a);
+						pos--;
+					}
+				}
+				if (is_sorted(a) == 1)
+					return ;
 				push_b(a, b);
 				start_a = *a;
 				if (start_a != NULL)
 					{current = start_a->next;
 					min_value = start_a->data;}
-				// print_list_forward(*a);
-				// print_list_forward(*b);
-				// printf("\n");
 			}
 			else
 			{
-				// printf("reverse ");
-				while (pos < lenght_a)
-				{
-					reverse_rotate_a(a);
-					pos++;
-				}
 				if (lenght_a != number_given)
+					max_index = find_position_big(b, min_value);
+				if (max_index > ((number_given - lenght_a)/2))
+				{
+					max_index = (number_given - lenght_a) - max_index;
+					while (max_index > 0 && reverse_pos > 0)
+						{
+							reverse_rotate_both(a, b);
+							reverse_pos--;
+							max_index--;
+						}
+					while 	(reverse_pos > 0)
 					{
-						pos = find_position_big(b, min_value);
-						// printf("%d", pos);
-						if (pos <= ((number_given - lenght_a)/2))
-							{
-								while (pos-- > 0)
-									rotate_b(b);
-							}
-						else{
-								pos = (number_given - lenght_a) - pos;
-								while(pos-- > 0)
-									reverse_rotate_b(b);
-							}
+						reverse_rotate_a(a);
+						reverse_pos--;
+					}
+					while (max_index-- > 0)
+						reverse_rotate_b(b);
+				}
+				else{
+					while(max_index-- > 0)
+						rotate_b(b);
+					while (reverse_pos > 0)
+						{
+							reverse_rotate_a(a);
+							reverse_pos--;
+						}
 					}
 				push_b(a, b);
 				start_a = *a;
 				if (start_a != NULL)
 					{current = start_a->next;
 					min_value = start_a->data;}
-				// print_list_forward(*a);
-				// print_list_forward(*b);
-				// printf("\n");
 			}
 			if (is_sorted(a) == 1)
 				if (is_sorted_descend(b) == 1)
 					return ;
 			lenght_a--;
-				// max_index = pos;
-					// swap_b(b);
-			// if (is_sorted(b) == 2)
-			// {
-			// 				// if ((*b)->data < (*b)->next->data)
-			// 				// {
-			// 				if (number_given - lenght_a > 3)
-			// 					{pos = find_position_big(b, 1, (*b)->data);
-			// 					if (pos == 1)
-			// 						swap_b(b);}
-			// 			// 	if (is_sorted_descend(b) == 2)
-			// 			// 		{
-			// 			// // 			pos = find_position_small(b, 1, (*b)->data);
-			// 			// // 			if (pos <= ((number_given - lenght_a)/2))
-			// 			// // 				{
-			// 			// // 					while ((pos + 1) > 0)
-			// 			// // 					{
-			// 			// // 						rotate_b(b);
-			// 			// // 						// if ((*b)->data < (*b)->next->data)
-			// 			// // 						// 	swap_b(b);
-			// 			// // 						pos--;
-			// 			// // 					}
-			// 			// // 				}
-			// 			// // 			else{
-			// 			// // 					while((pos - 1) < (number_given - lenght_a))
-			// 			// // 					{
-			// 			// // 						reverse_rotate_b(b);
-			// 			// // 						// if ((*b)->data < (*b)->next->data)
-			// 			// // 						// 	swap_b(b);
-			// 			// // 						pos++;
-			// 			// // 					}
-			// 			// // 				}
-			// 			// // 		// }
-			// 			// // }
-									
-			// 			// 		}
-			// }
 			max_index = 1;
-			// printf("%d true lenght\n", lenght_a);
-			// printf("banane\n");
 		}
 	}
-	// printf("%d test test\n", lenght_a);
-	// printf("%d",	max_index);
+}
+
+int	check_duplicate(t_Node *a, int num)
+{
+	t_Node	*temp;
+
+	if (a == NULL)
+		return (0);
+	temp = a;
+	while (temp->next != a)
+	{
+		if (temp->data == num)
+			return (1);
+		temp = temp->next;
+	}
+	if (temp->data == num)
+		return (1);
+	return (0);
 }
 
 int	push_swap(int argc, char **argv)
 {
 	t_Node	*a;
 	t_Node	*b;
+	int		i;
 
+	i = 1;
 	a = NULL;
 	b = NULL;
 	if (argc < 2)
@@ -643,57 +644,29 @@ int	push_swap(int argc, char **argv)
 	if (argc == 2)
 	{
 		if (is_valid_input(argv[1]) == 0)
-			return (write(1, "Error", 5));
+			return (write(2, "Error\n", 6));
 		// Process the single argument case
 	}
 	else
 	{
-		for (int i = 1; i < argc; i++)
+		while (i < argc)
 		{
 			if (is_valid_input(argv[i]) == 0)
-				return (write(1, "Error", 5));
+				return (free_all(&a), write(2, "Error\n", 6));
+			if (check_duplicate(a, ft_atoi(argv[i])))
+				return (free_all(&a), write(2, "Error\n", 6));
 			insert_at_end(&a, ft_atoi(argv[i]));
+			i++;
 		}
-		// sort_algorithm_push_five(&a, &b);
-		// print_list_forward(a);
-		// print_list_forward(b);
-		sort_algorithm(&a, &b, (argc - 1));
-		// print_list_forward(b);
+		if (is_sorted(&a) == 2)
+			sort_algorithm(&a, &b, (argc - 1));
 		while (b != NULL)
 		{
 			push_a(&a, &b);
-		}
-		// printf("gurke");
-		// print_list_forward(a);
-		// print_list_forward(b);
-		// for (int i = 0; i < 2; i++)
-		// {
-		// 	push_b(&a, &b);
-		// 	print_list_forward(a);
-		// 	printf("b_ ");
-		// 	print_list_forward(b);
-		// 	// print_list_forward(a);
-		// 	// reverse_rotate_a(&a);
-		// }
-		// // print_list_forward(head);
-		// swap_a(&a);
-		// print_list_forward(a);
-		// print_list_forward(b);
-		// swap_b(&b);
-		// print_list_forward(a);
-		// print_list_forward(b);
-		// swap_a(&head);
-		// print_list_forward(head);
-		// rotate_a(&head);
-		// print_list_forward(head);
-		// rotate_a(&head);
-		// print_list_forward(head);
-		// swap_a(&head);
-		// print_list_forward(head);
-		
+		}		
 	}
-	if (is_sorted(&a) == 1)
-		printf("sortiert");
+	// if (is_sorted(&a) == 1)
+	// 	printf("sortiert");
 	free_all(&a);
 	free_all(&b);
 	return (0);
@@ -701,9 +674,9 @@ int	push_swap(int argc, char **argv)
 
 int	main(int argc, char **argv)
 {
-	t_Node	*head;
+	// t_Node	*head;
 
-	head = NULL;
+	// head = NULL;
 	push_swap(argc, argv);
 	return (0);
 }
