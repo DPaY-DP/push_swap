@@ -6,7 +6,7 @@
 /*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/11 15:44:22 by dpfannen          #+#    #+#             */
-/*   Updated: 2026/03/24 18:26:23 by dpfannen         ###   ########.fr       */
+/*   Updated: 2026/04/01 14:49:39 by dpfannen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,30 +207,31 @@ void	push_a(t_Node **a, t_Node **b)
 	write(1, "pa\n", 3);
 }
 
-void	swap_stack(t_Node **head)
+void	swap_stack(t_Node **stack_head)
 {
-	t_Node	*temp;
+	t_Node	*head;
 	t_Node	*second;
 	t_Node	*tail;
 
-	if (head == NULL || *head == NULL || (*head)->next == *head)
+	if (stack_head == NULL || *stack_head == NULL || (*stack_head)->next == *stack_head)
 		return ;
-	temp = *head; // temp new head
-	tail = (*head)->prev;
-	second = temp->next; // second is next after old head
+	head = *stack_head; // temp new head
+	tail = (*stack_head)->prev;
+	second = head->next; // second is next after old head
 	if (tail == second)
 	{
-		*head = second;
+		*stack_head = second;
 		return ;
 	}
 	else
 	{
-	temp->next = second->next; // head next is second next
-	second->next = temp; // 
-	*head = second;
-	temp->prev = second;
-	second->prev = tail;
-	tail->next = second;
+	head->next = second->next; // previous 1 points next at 3
+	head->next->prev = head; //3 now points prev at new 2 
+	second->next = head; // prevoius 3 points prev at prevoius 1 now 2
+	*stack_head = second; // new head is 2 wich is now 1
+	head->prev = second; // prevoius 1, now 2, prev points at new 1
+	second->prev = tail; // new 1 prev points at tail
+	tail->next = second; // tail next points at new 1
 	}
 }
 
@@ -485,40 +486,46 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 	int		pos;
 	int		reverse_pos;
 	int		best_direction;
+	int		max_rotate;
 
-	reverse_pos = 0;
 	max_index = 1;
-	pos = 0;
 	lenght_a = number_given;
 	start_a = *a;
 	current = start_a->next;
 	min_value = start_a->data;
-	best_direction = 1;
+	if (number_given > 250)
+		max_rotate = 15;
+	else
+		max_rotate = 7;
 	if (number_given < 4)
 		sort_tiny(a, number_given);
 	else
 	{
 		while (lenght_a > 0)
 		{
-			// while (current != start_a && start_a != NULL && max_index < 11)
-			// {
-			// 	if (current->data <	min_value)
-			// 	{
-			// 		best_direction = 1;
-			// 		min_value = current->data;
-			// 		pos = max_index;
-			// 		max_index++;
-			// 	}
-			// 	else
-			// 		max_index++;
-			// 	current = current->next;
-			// }
-			pos = find_position_small(a, max_index, min_value);
-			max_index = 1;
-			current = start_a->prev;
-			while (current != start_a && start_a != NULL && max_index < 11)
+			best_direction = 1;
+			pos = 0;
+			while (current != start_a && start_a != NULL && max_index < max_rotate)
 			{
 				if (current->data <	min_value)
+				{
+					best_direction = 1;
+					min_value = current->data;
+					pos = max_index;
+					max_index++;
+				}
+				else
+					max_index++;
+				current = current->next;
+			}
+			reverse_pos = 0;
+			// pos = find_position_small(a, max_index, min_value);
+			// best_direction = 1;
+			max_index = 1;
+			current = start_a->prev;
+			while (current != start_a && start_a != NULL && max_index < max_rotate)
+			{
+				if (current->data <= min_value)
 				{
 					best_direction = 2;
 					min_value = current->data;
@@ -529,7 +536,10 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 					max_index++;
 				current = current->prev;
 			}
-			if 	((best_direction == 1))
+			if (lenght_a < max_rotate)
+				if (pos < reverse_pos)
+					best_direction = 1;
+			if 	(best_direction == 1)
 			{
 				if (lenght_a != number_given)
 					max_index = find_position_big(b, min_value);
@@ -559,12 +569,18 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 						pos--;
 					}
 				}
-				if (is_sorted(a) == 1)
-					return ;
+				// if (is_sorted(a) == 1)
+				// 	return ;
 				push_b(a, b);
+				// if ((*a) != NULL && ((*a)->data > (*a)->next->data))
+				// 	swap_a(a);
 				start_a = *a;
 				if (start_a != NULL)
-					{current = start_a->next;
+					{if (start_a->data > start_a->next->data)
+							{swap_a(a);
+								start_a = *a;
+							}
+						current = start_a->next;
 					min_value = start_a->data;}
 			}
 			else
@@ -582,9 +598,9 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 						}
 					while 	(reverse_pos > 0)
 					{
-						reverse_rotate_a(a);
-						reverse_pos--;
-					}
+							reverse_rotate_a(a);
+							reverse_pos--;
+						}
 					while (max_index-- > 0)
 						reverse_rotate_b(b);
 				}
@@ -598,9 +614,16 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 						}
 					}
 				push_b(a, b);
+				// if ((*a) != NULL && ((*a)->data > (*a)->next->data))
+				// 	swap_a(a);
 				start_a = *a;
 				if (start_a != NULL)
-					{current = start_a->next;
+					{
+						if (start_a->data > start_a->next->data)
+							{swap_a(a);
+								start_a = *a;
+							}
+					current = start_a->next;
 					min_value = start_a->data;}
 			}
 			if (is_sorted(a) == 1)
@@ -608,6 +631,11 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 					return ;
 			lenght_a--;
 			max_index = 1;
+			if (lenght_a < 4)
+			{
+				sort_tiny(a, lenght_a);
+				return ;
+			}
 		}
 	}
 }
