@@ -56,32 +56,12 @@ void    push_stack(t_Node **src, t_Node **dst)
 
 void	push_a(t_Node **a, t_Node **b)
 {
-    if (b == NULL || *b == NULL)
-        return ;
-    attach_top(a, *b);
-    *b = (*b)->next;
-    if (*b == (*b)->prev)
-        *b = NULL;
-    else
-    {
-        (*b)->prev->next = *b;
-        (*b)->prev = (*b)->prev->prev;
-    }
+    push_stack(b, a);
     write(1, "pa\n", 3);
 }
 void    push_b(t_Node **a, t_Node **b)
 {
-    if (a == NULL || *a == NULL)
-        return ;
-    attach_top(b, *a);
-    *a = (*a)->next;
-    if (*a == (*a)->prev)
-        *a = NULL;
-    else
-    {
-        (*a)->prev->next = *a;
-        (*a)->prev = (*a)->prev->prev;
-    }
+    push_stack(a, b);
     write(1, "pb\n", 3);
 }
 

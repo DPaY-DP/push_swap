@@ -41,9 +41,9 @@ void	insert_at_end(t_Node **head, int data)
 
 long int	ft_atoi(const char *str)
 {
-	int			i;
-	long int	nbr;
-	int			sign;
+	int				i;
+	long long int	nbr;
+	int				sign;
 
 	i = 0;
 	nbr = 0;
@@ -68,7 +68,7 @@ long int	ft_atoi(const char *str)
 
 char	is_valid_input(char *c)
 {
-	long int	i;
+	long long int	i;
 
 	i = 0;
 	if (!c || c[0] == '\0' || ((c[0] == '-' || c[0] == '+') && c[1] == '\0'))

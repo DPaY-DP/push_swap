@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort_algorithm.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/14 23:55:39 by marvin            #+#    #+#             */
+/*   Updated: 2026/04/14 23:55:39 by marvin           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include "push_swap.h"
 
 
@@ -67,7 +79,7 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 			if 	(best_direction == 1)
 			{
 				if (lenght_a != number_given)
-					max_index = find_position_big(b, min_value);
+					max_index = find_position_small(b, 1, min_value);
 				if (max_index <= ((number_given - lenght_a)/2))
 				{
 					while (max_index > 0 && pos > 0)
@@ -111,7 +123,7 @@ void	sort_algorithm(t_Node **a, t_Node **b, int number_given)
 			else
 			{
 				if (lenght_a != number_given)
-					max_index = find_position_big(b, min_value);
+					max_index = find_position_small(b, 1, min_value);
 				if (max_index > ((number_given - lenght_a)/2))
 				{
 					max_index = (number_given - lenght_a) - max_index;

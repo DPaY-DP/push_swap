@@ -1,29 +1,5 @@
 # include "push_swap.h"
 
-int	find_position_small(t_Node **stack, int max_index, int min_value)
-{
-	t_Node	*current;
-	t_Node	*start;
-	int		pos;
-
-	start = *stack;
-	current = start->next;
-	pos = 0;
-	while (current != start && start != NULL && max_index < 11)
-		{
-			if (current->data <	min_value)
-			{
-				min_value = current->data;
-				pos = max_index;
-				max_index++;
-			}
-			else
-				max_index++;
-			current = current->next;
-		}
-	return (pos);
-}
-
 int	find_position_big(t_Node **stack, int min_value)
 {
 	t_Node	*current;
@@ -72,3 +48,65 @@ int	find_position_big(t_Node **stack, int min_value)
 		return (best_pos);
 	return (pos);
 }
+
+int	find_best_position(t_Node **stack, int max_index, int min_value)
+{
+	t_Node	*current;
+	t_Node	*start;
+	int		best_pos;
+	int		best_value;
+
+	best_pos = -1;
+	start = *stack;
+	current = start;
+	if (current->data <	min_value && ((best_pos == -1) || current->data > best_value))
+			{
+				best_value = start->data;
+				best_pos = 0;
+			}
+	current = current->next;
+	while (current != start)
+	{
+		if (current->data <	min_value && ((best_pos == -1) || current->data > best_value))
+			{
+				best_value = current->data;
+				best_pos = max_index;
+			}
+			max_index++;
+			current = current->next;
+	}
+	return (best_pos);
+}
+
+int	find_position_small(t_Node **stack, int max_index, int min_value)
+{
+	t_Node	*current;
+	t_Node	*start;
+	int		pos;
+	int		best_pos;
+	int		max_value;
+
+	// if (stack == NULL || *stack == NULL)
+	// 	return (0);
+	start = *stack;
+	current = start->next;
+	pos = 0;
+	max_value = start->data;
+	while (current != start && start != NULL)
+		{
+			if (current->data >	max_value)
+			{
+				max_value = current->data;
+				pos = max_index;
+			}
+			max_index++;
+			current = current->next;
+		}
+	best_pos = find_best_position(stack, 1, min_value);
+	if (best_pos != -1)
+		return (best_pos);
+	return (pos);
+}
+
+
+
