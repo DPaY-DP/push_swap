@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 # include "push_swap.h"
 // temp new head
 // second is next after old head
