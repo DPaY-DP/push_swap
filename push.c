@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/15 12:26:31 by dpfannen          #+#    #+#             */
+/*   Updated: 2026/04/15 12:26:31 by dpfannen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include "push_swap.h"
 /*taking the given node and attach it on the top of the wanted stack
 link all nodes correctly in both directions*/

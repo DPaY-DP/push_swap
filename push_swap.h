@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/15 12:26:28 by dpfannen          #+#    #+#             */
+/*   Updated: 2026/04/15 12:26:28 by dpfannen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
@@ -37,8 +49,12 @@ int		    is_sorted_descend(t_Node **b);
 int		    check_duplicate(t_Node *a, int num);
 char		is_valid_input(char *str);
 long int	ft_atoi(const char *str);
-void	    free_all(t_Node **head);
-int         find_best_position(t_Node **stack, int start_pos, int value);
-void	    print_list_forward(t_Node *head);
+void		free_all(t_Node **head);
+int			find_best_position(t_Node **stack, int start_pos, int value);
+void		print_list_forward(t_Node *head);
+char		**ft_split(char const *s, char c);
+void		free_all_array(char **array, int i);
+size_t		ft_strlen(char **str);
+int			numbers_on_stack(t_Node **stack);
 
 #endif

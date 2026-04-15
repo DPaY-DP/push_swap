@@ -1,4 +1,16 @@
-# include "push_swap.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_position.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/15 12:26:12 by dpfannen          #+#    #+#             */
+/*   Updated: 2026/04/15 12:26:12 by dpfannen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "push_swap.h"
 
 // int	find_position_big(t_Node **stack, int min_value)
 // {
@@ -48,7 +60,26 @@
 // 		return (best_pos);
 // 	return (pos);
 // }
-/*Finding the best position on stack b, which is 1 smaller than the min_value given in
+static int	check_start_position_helper(t_Node **stack, int min_value)
+{
+	t_Node	*start;
+	int		best_value;
+	int		best_pos;
+
+	best_pos = -1;
+	best_value = -2147483648;
+	start = *stack;
+	if (start->data < min_value && ((best_pos == -1) 
+		|| start->data > best_value))
+			{
+				best_value = start->data;
+				best_pos = 0;
+			}
+	return (best_pos);
+}
+
+/*Finding the best position on stack b, which is 1 smaller 
+than the min_value given in
 Giving back the position of the value on the stack*/
 int	find_best_position(t_Node **stack, int max_index, int min_value)
 {
@@ -57,18 +88,16 @@ int	find_best_position(t_Node **stack, int max_index, int min_value)
 	int		best_pos;
 	int		best_value;
 
-	best_pos = -1;
 	start = *stack;
-	current = start;
-	if (current->data <	min_value && ((best_pos == -1) || current->data > best_value))
-			{
-				best_value = start->data;
-				best_pos = 0;
-			}
-	current = current->next;
+	best_value = -2147483648;
+	best_pos = check_start_position_helper(stack, min_value);
+	if (best_pos == 0)
+		best_value = start->data;
+	current = start->next;
 	while (current != start)
 	{
-		if (current->data <	min_value && ((best_pos == -1) || current->data > best_value))
+		if (current->data <	min_value && ((best_pos == -1) 
+			|| current->data > best_value))
 			{
 				best_value = current->data;
 				best_pos = max_index;

@@ -13,9 +13,9 @@
 CC = cc
 NAME = push_swap
 CFLAGS = -Wall -Wextra -Werror 
-OBJ_FILES = find_position.c free_all.c helper.c insert.c \
-is_sorted.c push_swap.c push.c reverse_rotate.c rotate.c \
-sort_algorithm.c sort_tiny.c swap.c
+OBJ_FILES = find_position.c free_all.c ft_split.c helper.c \
+insert.c is_sorted.c push_swap.c push.c reverse_rotate.c \
+rotate.c sort_algorithm.c sort_tiny.c swap.c
 OBJS = $(OBJ_FILES:.c=.o)
 PUSH_SWAP = -C push_swap
 

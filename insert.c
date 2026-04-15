@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   insert.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/04/15 12:26:20 by dpfannen          #+#    #+#             */
+/*   Updated: 2026/04/15 12:26:20 by dpfannen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 # include "push_swap.h"
 /*creating the data type t_Node for the linked list*/
 t_Node	*create_node(int data)
@@ -79,7 +91,6 @@ char	is_valid_input(char *c)
 		if ((c[i] == '-' && i == 0) || (c[i] == '+' && i == 0))
 		{
 			i++;
-			continue ;
 		}
 		if (!(c[i] >= '0' && c[i] <= '9'))
 			return (0);
