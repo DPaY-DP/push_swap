@@ -1,5 +1,5 @@
 # include "push_swap.h"
-
+/*creating the data type t_Node for the linked list*/
 t_Node	*create_node(int data)
 {
 	t_Node	*newt_node;
@@ -10,7 +10,13 @@ t_Node	*create_node(int data)
 	newt_node->prev = NULL;
 	return (newt_node);
 }
-
+/*putting every given argument number and puttung at the end of stack a*/
+// temp = (*head)->prev; //gets tail
+// newt_node->next = *head; // new node points to old head
+// newt_node->prev = temp; // old head points back to new node
+// (*head)->prev = newt_node;
+// temp->next = newt_node; // tail points to new head
+// *head = newt_node; // new head
 void	insert_at_end(t_Node **head, int data)
 {
 	t_Node	*newt_node;
@@ -31,14 +37,8 @@ void	insert_at_end(t_Node **head, int data)
 	newt_node->prev = temp;
 	newt_node->next = *head;
 	(*head)->prev = newt_node;
-	// temp = (*head)->prev; //gets tail
-	// newt_node->next = *head; // new node points to old head
-	// newt_node->prev = temp; // old head points back to new node
-	// (*head)->prev = newt_node;
-	// temp->next = newt_node; // tail points to new head
-	// *head = newt_node; // new head
 }
-
+/*atoi function*/
 long int	ft_atoi(const char *str)
 {
 	int				i;
@@ -65,7 +65,8 @@ long int	ft_atoi(const char *str)
 		return (nbr * -1);
 	return (nbr);
 }
-
+/*cheching if argument is valid or not
+checking if number is over int max or under int min*/
 char	is_valid_input(char *c)
 {
 	long long int	i;
@@ -85,12 +86,11 @@ char	is_valid_input(char *c)
 		i++;
 	}
 	i = ft_atoi(c);
-	// printf("%ld", i);
 	if (i > 2147483647 || i < -2147483648)
 		return (0);
 	return (1);
 }
-
+/*check if a number given is duplicate on the stack*/
 int	check_duplicate(t_Node *a, int num)
 {
 	t_Node	*temp;

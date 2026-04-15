@@ -1,5 +1,6 @@
 # include "push_swap.h"
-
+/*taking the given node and attach it on the top of the wanted stack
+link all nodes correctly in both directions*/
 void	attach_top(t_Node **dst, t_Node *node)
 {
 	t_Node	*dst_head;
@@ -20,7 +21,8 @@ void	attach_top(t_Node **dst, t_Node *node)
 		node->prev = dst_tail;
 	}
 }
-
+/*taking the top node and link the others correctly so the second node 
+is the new current head of the source stack and return the old head*/
 t_Node	*detach_top(t_Node **src)
 {
 	t_Node	*src_head;
@@ -40,7 +42,7 @@ t_Node	*detach_top(t_Node **src)
 		*src = src_first;
 	return (src_head);
 }
-
+/*take head of source and put on destination stack*/
 void    push_stack(t_Node **src, t_Node **dst)
 {
     t_Node  *src_head;

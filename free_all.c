@@ -1,5 +1,5 @@
 # include "push_swap.h"
-
+/*Free everything on the stacks*/
 void	free_all(t_Node **head)
 {
 	t_Node	*temp;

@@ -1,5 +1,5 @@
 # include "push_swap.h"
-
+/*checking if the stack is sorted in ascended order*/
 int	is_sorted(t_Node **a)
 {
 	t_Node	*current;
@@ -18,7 +18,7 @@ int	is_sorted(t_Node **a)
 	}
 	return (1);
 }
-
+/*check if the stack is sorted in descended order*/
 int	is_sorted_descend(t_Node **a)
 {
 	t_Node	*current;

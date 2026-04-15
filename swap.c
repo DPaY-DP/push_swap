@@ -1,6 +1,14 @@
 
 # include "push_swap.h"
-
+// temp new head
+// second is next after old head
+// previous 1 points next at 3
+//3 now points prev at new 2 
+// prevoius 3 points prev at prevoius 1 now 2
+// new head is 2 wich is now 1
+// prevoius 1, now 2, prev points at new 1
+// new 1 prev points at tail
+// tail next points at new 1
 void	swap_stack(t_Node **stack_head)
 {
 	t_Node	*head;
@@ -9,9 +17,9 @@ void	swap_stack(t_Node **stack_head)
 
 	if (stack_head == NULL || *stack_head == NULL || (*stack_head)->next == *stack_head)
 		return ;
-	head = *stack_head; // temp new head
+	head = *stack_head; 
 	tail = (*stack_head)->prev;
-	second = head->next; // second is next after old head
+	second = head->next; 
 	if (tail == second)
 	{
 		*stack_head = second;
@@ -19,13 +27,13 @@ void	swap_stack(t_Node **stack_head)
 	}
 	else
 	{
-	head->next = second->next; // previous 1 points next at 3
-	head->next->prev = head; //3 now points prev at new 2 
-	second->next = head; // prevoius 3 points prev at prevoius 1 now 2
-	*stack_head = second; // new head is 2 wich is now 1
-	head->prev = second; // prevoius 1, now 2, prev points at new 1
-	second->prev = tail; // new 1 prev points at tail
-	tail->next = second; // tail next points at new 1
+	head->next = second->next; 
+	head->next->prev = head; 
+	second->next = head; 
+	*stack_head = second; 
+	head->prev = second; 
+	second->prev = tail; 
+	tail->next = second; 
 	}
 }
 

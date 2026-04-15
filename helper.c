@@ -1,5 +1,6 @@
 # include "push_swap.h"
-
+/*Debugg-function
+Printing out the values on the stack*/
 void	print_list_forward(t_Node *head)
 {
 	t_Node	*temp;
