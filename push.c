@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "push_swap.h"
+#include "push_swap.h"
+
 /*taking the given node and attach it on the top of the wanted stack
 link all nodes correctly in both directions*/
 void	attach_top(t_Node **dst, t_Node *node)
@@ -33,6 +34,7 @@ void	attach_top(t_Node **dst, t_Node *node)
 		node->prev = dst_tail;
 	}
 }
+
 /*taking the top node and link the others correctly so the second node 
 is the new current head of the source stack and return the old head*/
 t_Node	*detach_top(t_Node **src)
@@ -54,28 +56,29 @@ t_Node	*detach_top(t_Node **src)
 		*src = src_first;
 	return (src_head);
 }
+
 /*take head of source and put on destination stack*/
-void    push_stack(t_Node **src, t_Node **dst)
+void	push_stack(t_Node **src, t_Node **dst)
 {
-    t_Node  *src_head;
-    
-    if (*src == NULL)
-        return ;
-    src_head = detach_top(src);
-    if (src_head == NULL)
-        return ;
-    attach_top(dst, src_head);
-    *dst = src_head;
+	t_Node	*src_head;
+
+	if (*src == NULL)
+		return ;
+	src_head = detach_top(src);
+	if (src_head == NULL)
+		return ;
+	attach_top(dst, src_head);
+	*dst = src_head;
 }
 
 void	push_a(t_Node **a, t_Node **b)
 {
-    push_stack(b, a);
-    write(1, "pa\n", 3);
-}
-void    push_b(t_Node **a, t_Node **b)
-{
-    push_stack(a, b);
-    write(1, "pb\n", 3);
+	push_stack(b, a);
+	write(1, "pa\n", 3);
 }
 
+void	push_b(t_Node **a, t_Node **b)
+{
+	push_stack(a, b);
+	write(1, "pb\n", 3);
+}

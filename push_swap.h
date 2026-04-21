@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/15 12:26:28 by dpfannen          #+#    #+#             */
-/*   Updated: 2026/04/15 12:26:28 by dpfannen         ###   ########.fr       */
+/*   Created: 2026/04/21 13:06:54 by dpfannen          #+#    #+#             */
+/*   Updated: 2026/04/21 13:06:54 by dpfannen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
@@ -19,34 +18,34 @@
 # include <stdlib.h>
 
 typedef struct t_Node {
-    int				data;
-    struct t_Node	*next;
-    struct t_Node	*prev;
+	int				data;
+	struct t_Node	*next;
+	struct t_Node	*prev;
 }	t_Node;
 
-t_Node	    *create_node(int data);
-void	    insert_at_end(t_Node **head, int data); 
-void	    rotate_stack(t_Node **head);
-void	    reverse_rotate_stack(t_Node **head);
-void	    swap_stack(t_Node **head);
-void	    push_stack(t_Node **src, t_Node **dst);
-void	    push_a(t_Node **a, t_Node **b);
-void	    push_b(t_Node **a, t_Node **b);
-void	    swap_a(t_Node **a);
-void	    swap_b(t_Node **b);
-void	    rotate_a(t_Node **a);
-void	    rotate_b(t_Node **b);
-void	    reverse_rotate_a(t_Node **a);
-void	    reverse_rotate_b(t_Node **b);
-void	    rotate_both(t_Node **a, t_Node **b);
-void	    reverse_rotate_both(t_Node **a, t_Node **b);
-void	    sort_tiny(t_Node **a, int stack_lenght);
-void	    sort_algorithm(t_Node **a, t_Node **b, int number_given);
-int		    find_position_big(t_Node **stack, int min_value);
-int		    find_position_small(t_Node **stack, int max_index, int min_value);
-int		    is_sorted(t_Node **a);
-int		    is_sorted_descend(t_Node **b);
-int		    check_duplicate(t_Node *a, int num);
+t_Node		*create_node(int data);
+void		insert_at_end(t_Node **head, int data);
+void		rotate_stack(t_Node **head);
+void		reverse_rotate_stack(t_Node **head);
+void		swap_stack(t_Node **head);
+void		push_stack(t_Node **src, t_Node **dst);
+void		push_a(t_Node **a, t_Node **b);
+void		push_b(t_Node **a, t_Node **b);
+void		swap_a(t_Node **a);
+void		swap_b(t_Node **b);
+void		rotate_a(t_Node **a);
+void		rotate_b(t_Node **b);
+void		reverse_rotate_a(t_Node **a);
+void		reverse_rotate_b(t_Node **b);
+void		rotate_both(t_Node **a, t_Node **b);
+void		reverse_rotate_both(t_Node **a, t_Node **b);
+void		sort_tiny(t_Node **a, int stack_lenght);
+void		sort_algorithm(t_Node **a, t_Node **b, int number_given);
+int			find_position_big(t_Node **stack, int min_value);
+int			find_position_small(t_Node **stack, int max_index, int min_value);
+int			is_sorted(t_Node **a);
+int			is_sorted_descend(t_Node **b);
+int			check_duplicate(t_Node *a, int num);
 char		is_valid_input(char *str);
 long int	ft_atoi(const char *str);
 void		free_all(t_Node **head);
@@ -56,5 +55,8 @@ char		**ft_split(char const *s, char c);
 void		free_all_array(char **array, int i);
 size_t		ft_strlen(char **str);
 int			numbers_on_stack(t_Node **stack);
+void		rotate_loop(t_Node **a, t_Node **b, int b_index, int a_index);
+void		reverse_rotate_loop(t_Node **a, t_Node **b, int b_index,
+				int a_index);
 
 #endif

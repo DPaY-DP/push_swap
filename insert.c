@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "push_swap.h"
+#include "push_swap.h"
+
 /*creating the data type t_Node for the linked list*/
 t_Node	*create_node(int data)
 {
@@ -22,6 +23,7 @@ t_Node	*create_node(int data)
 	newt_node->prev = NULL;
 	return (newt_node);
 }
+
 /*putting every given argument number and puttung at the end of stack a*/
 // temp = (*head)->prev; //gets tail
 // newt_node->next = *head; // new node points to old head
@@ -50,6 +52,7 @@ void	insert_at_end(t_Node **head, int data)
 	newt_node->next = *head;
 	(*head)->prev = newt_node;
 }
+
 /*atoi function*/
 long int	ft_atoi(const char *str)
 {
@@ -77,6 +80,7 @@ long int	ft_atoi(const char *str)
 		return (nbr * -1);
 	return (nbr);
 }
+
 /*cheching if argument is valid or not
 checking if number is over int max or under int min*/
 char	is_valid_input(char *c)
@@ -89,9 +93,7 @@ char	is_valid_input(char *c)
 	while (c[i])
 	{
 		if ((c[i] == '-' && i == 0) || (c[i] == '+' && i == 0))
-		{
 			i++;
-		}
 		if (!(c[i] >= '0' && c[i] <= '9'))
 			return (0);
 		i++;
@@ -101,6 +103,7 @@ char	is_valid_input(char *c)
 		return (0);
 	return (1);
 }
+
 /*check if a number given is duplicate on the stack*/
 int	check_duplicate(t_Node *a, int num)
 {

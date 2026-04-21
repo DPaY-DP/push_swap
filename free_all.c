@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "push_swap.h"
+#include "push_swap.h"
+
 /*Free everything on the stacks*/
 void	free_all(t_Node **head)
 {
@@ -18,7 +19,7 @@ void	free_all(t_Node **head)
 	t_Node	*last;
 
 	if (head == NULL)
-		return;
+		return ;
 	if (*head == NULL)
 		return ;
 	last = (*head)->prev;

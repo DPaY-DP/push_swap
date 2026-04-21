@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "push_swap.h"
+#include "push_swap.h"
+
 // temp new head
 // second is next after old head
 // previous 1 points next at 3
@@ -26,11 +27,12 @@ void	swap_stack(t_Node **stack_head)
 	t_Node	*second;
 	t_Node	*tail;
 
-	if (stack_head == NULL || *stack_head == NULL || (*stack_head)->next == *stack_head)
+	if (stack_head == NULL || *stack_head == NULL
+		|| (*stack_head)->next == *stack_head)
 		return ;
-	head = *stack_head; 
+	head = *stack_head;
 	tail = (*stack_head)->prev;
-	second = head->next; 
+	second = head->next;
 	if (tail == second)
 	{
 		*stack_head = second;
@@ -38,13 +40,13 @@ void	swap_stack(t_Node **stack_head)
 	}
 	else
 	{
-	head->next = second->next; 
-	head->next->prev = head; 
-	second->next = head; 
-	*stack_head = second; 
-	head->prev = second; 
-	second->prev = tail; 
-	tail->next = second; 
+		head->next = second->next;
+		head->next->prev = head;
+		second->next = head;
+		*stack_head = second;
+		head->prev = second;
+		second->prev = tail;
+		tail->next = second;
 	}
 }
 

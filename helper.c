@@ -10,7 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "push_swap.h"
+#include "push_swap.h"
+
 /*Debugg-function
 Printing out the values on the stack*/
 void	print_list_forward(t_Node *head)
@@ -33,6 +34,7 @@ void	print_list_forward(t_Node *head)
 		printf(" ");
 	printf("\n");
 }
+
 /*count how many str on **array*/
 size_t	ft_strlen(char **str)
 {
@@ -43,6 +45,7 @@ size_t	ft_strlen(char **str)
 		i++;
 	return (i);
 }
+
 /*count how many numbers on stack*/
 int	numbers_on_stack(t_Node **stack)
 {
@@ -63,3 +66,36 @@ int	numbers_on_stack(t_Node **stack)
 	return (count);
 }
 
+void	rotate_loop(t_Node **a, t_Node **b, int b_index, int a_index)
+{
+	while (b_index > 0 && a_index > 0)
+	{
+		rotate_both(a, b);
+		a_index--;
+		b_index--;
+	}
+	while (a_index > 0)
+	{
+		rotate_a(a);
+		a_index--;
+	}
+	while (b_index-- > 0)
+		rotate_b(b);
+}
+
+void	reverse_rotate_loop(t_Node **a, t_Node **b, int b_index, int a_index)
+{
+	while (b_index > 0 && a_index > 0)
+	{
+		reverse_rotate_both(a, b);
+		a_index--;
+		b_index--;
+	}
+	while (a_index > 0)
+	{
+		reverse_rotate_a(a);
+		a_index--;
+	}
+	while (b_index-- > 0)
+		reverse_rotate_b(b);
+}

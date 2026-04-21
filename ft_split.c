@@ -6,7 +6,7 @@
 /*   By: dpfannen <dpfannen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 13:04:06 by dpfannen          #+#    #+#             */
-/*   Updated: 2026/04/15 13:24:12 by dpfannen         ###   ########.fr       */
+/*   Updated: 2026/04/21 12:52:18 by dpfannen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ static char	*word_dub(char const *s, int start, int end)
 	word[i] = '\0';
 	return (word);
 }
-// free all of the arrays until array & array inside array is freeed
 
+// free all of the arrays until array & array inside array is freeed
 void	free_all_array(char **array, int i)
 {
 	int	j;
@@ -63,10 +63,10 @@ void	free_all_array(char **array, int i)
 	}
 	free(array);
 }
+
 /*first if: to check if delimiter is at start*/
 /*second if: if its delimiter or end of string put substring in array*/
 /*if its failing free every array and give NULL*/
-
 static char	**ft_cpy(char **tab, const char *s, char c)
 {
 	int	i;

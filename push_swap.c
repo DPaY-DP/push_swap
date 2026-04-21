@@ -12,24 +12,61 @@
 
 #include "push_swap.h"
 
+static int	insert_on_stack(t_Node **a, char **tab, int length)
+{
+	int	j;
+
+	j = 0;
+	while (j < length)
+	{
+		if (is_valid_input(tab[j]) == 0)
+			return (-1);
+		if (check_duplicate(*a, ft_atoi(tab[j])))
+			return (-1);
+		insert_at_end(a, ft_atoi(tab[j++]));
+	}
+	return (0);
+}
+
+static int	init_list(t_Node **a, int argc, char **argv,
+	char **tab)
+{
+	int		i;
+	int		length;
+	int		j;
+
+	i = 1;
+	tab = ft_split(argv[1], ' ');
+	if (tab)
+		length = ft_strlen(tab);
+	while (i < argc)
+	{
+		j = insert_on_stack(a, tab, length);
+		if (j == -1)
+			return (free_all(a), free_all_array(tab, length),
+				write(2, "Error\n", 6));
+		free_all_array(tab, length);
+		tab = ft_split(argv[++i], ' ');
+		if (tab)
+			length = ft_strlen(tab);
+	}
+	return (0);
+}
+
 /*main function of push_swap
 starting to check and split the first argv
 if valid and only 2 arg then do nothing
 if more than 2 than put everything on stack a
 then sort stack a in main sort_argorithm func
 later free everything so no leaks*/
-int	push_swap(int argc, char **argv)
+int	push_swap(int argc, char **argv, t_Node **a)
 {
-	t_Node	*a;
-	t_Node	*b;
 	int		i;
 	char	**tab;
 	int		length;
 	int		j;
 
 	i = 1;
-	a = NULL;
-	b = NULL;
 	j = 0;
 	if (argc < 2)
 		return (0);
@@ -44,62 +81,25 @@ int	push_swap(int argc, char **argv)
 			return (free_all_array(tab, length), write(2, "Error\n", 6));
 	}
 	else
-	{
-		while (i < argc)
-		{
-			if (length != 1)
-			{
-				while (j < length)
-				{
-					if (is_valid_input(tab[j]) == 0)
-						return (free_all(&a), free_all_array(tab, length), 
-						write(2, "Error\n", 6));
-					if (check_duplicate(a, ft_atoi(tab[j])))
-						return (free_all(&a), free_all_array(tab, length), 
-						write(2, "Error\n", 6));
-					insert_at_end(&a, ft_atoi(tab[j]));
-					j++;
-				}
-				j = 0;
-			}
-			else
-			{
-				if (is_valid_input(tab[j]) == 0)
-						return (free_all(&a), free_all_array(tab, length), 
-						write(2, "Error\n", 6));
-					if (check_duplicate(a, ft_atoi(tab[j])))
-						return (free_all(&a), free_all_array(tab, length), 
-						write(2, "Error\n", 6));
-					insert_at_end(&a, ft_atoi(tab[j]));
-			}
-			i++;
-			free_all_array(tab, length);
-			tab = ft_split(argv[i], ' ');
-			if (tab)
-				length = ft_strlen(tab);
-		}
-		if (is_sorted(&a) == 2)
-			sort_algorithm(&a, &b, numbers_on_stack(&a));
-		while (b != NULL)
-		{
-			push_a(&a, &b);
-		}		
-	}
-
-	// if (is_sorted(&a) == 1)
-	// 	printf("sortiert");
+		init_list(a, argc, argv, tab);
 	if (tab)
 		free_all_array(tab, length);
-	free_all(&a);
-	free_all(&b);
 	return (0);
 }
 
 int	main(int argc, char **argv)
 {
-	// t_Node	*head;
+	t_Node	*a;
+	t_Node	*b;
 
-	// head = NULL;
-	push_swap(argc, argv);
+	a = NULL;
+	b = NULL;
+	push_swap(argc, argv, &a);
+	if (is_sorted(&a) == 2)
+		sort_algorithm(&a, &b, numbers_on_stack(&a));
+	while (b != NULL)
+		push_a(&a, &b);
+	free_all(&a);
+	free_all(&b);
 	return (0);
 }

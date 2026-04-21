@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "push_swap.h"
+#include "push_swap.h"
 
 void	reverse_rotate_stack(t_Node **head)
 {
@@ -30,11 +30,11 @@ void	reverse_rotate_stack(t_Node **head)
 	}
 	else
 	{
-	*head = last;
-	last->next = first;
-	first->prev = last;
-	first->next = second;
-	second->prev = first;
+		*head = last;
+		last->next = first;
+		first->prev = last;
+		first->next = second;
+		second->prev = first;
 	}
 }
 
