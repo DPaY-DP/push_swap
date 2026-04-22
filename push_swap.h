@@ -40,8 +40,8 @@ void		reverse_rotate_b(t_Node **b);
 void		rotate_both(t_Node **a, t_Node **b);
 void		reverse_rotate_both(t_Node **a, t_Node **b);
 void		sort_tiny(t_Node **a, int stack_lenght);
-void		sort_algorithm(t_Node **a, t_Node **b, int number_given);
-int			find_position_big(t_Node **stack, int min_value);
+void		sort_algorithm(t_Node **a, t_Node **b, int lenght_a,
+				int max_rotate);
 int			find_position_small(t_Node **stack, int max_index, int min_value);
 int			is_sorted(t_Node **a);
 int			is_sorted_descend(t_Node **b);
@@ -58,5 +58,9 @@ int			numbers_on_stack(t_Node **stack);
 void		rotate_loop(t_Node **a, t_Node **b, int b_index, int a_index);
 void		reverse_rotate_loop(t_Node **a, t_Node **b, int b_index,
 				int a_index);
+int			move_rotate_forward(t_Node **a, t_Node **b, int a_pos,
+				int min_value);
+int			move_rotate_backward(t_Node **a, t_Node **b, int a_pos,
+				int min_value);
 
 #endif

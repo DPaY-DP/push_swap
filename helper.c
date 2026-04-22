@@ -53,8 +53,8 @@ int	numbers_on_stack(t_Node **stack)
 	t_Node	*current;
 	int		count;
 
-	if (!stack)
-		return (-1);
+	if (!*stack)
+		return (0);
 	start = *stack;
 	current = start->next;
 	count = 1;
@@ -66,36 +66,3 @@ int	numbers_on_stack(t_Node **stack)
 	return (count);
 }
 
-void	rotate_loop(t_Node **a, t_Node **b, int b_index, int a_index)
-{
-	while (b_index > 0 && a_index > 0)
-	{
-		rotate_both(a, b);
-		a_index--;
-		b_index--;
-	}
-	while (a_index > 0)
-	{
-		rotate_a(a);
-		a_index--;
-	}
-	while (b_index-- > 0)
-		rotate_b(b);
-}
-
-void	reverse_rotate_loop(t_Node **a, t_Node **b, int b_index, int a_index)
-{
-	while (b_index > 0 && a_index > 0)
-	{
-		reverse_rotate_both(a, b);
-		a_index--;
-		b_index--;
-	}
-	while (a_index > 0)
-	{
-		reverse_rotate_a(a);
-		a_index--;
-	}
-	while (b_index-- > 0)
-		reverse_rotate_b(b);
-}

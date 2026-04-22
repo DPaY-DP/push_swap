@@ -43,8 +43,7 @@ static int	init_list(t_Node **a, int argc, char **argv,
 	{
 		j = insert_on_stack(a, tab, length);
 		if (j == -1)
-			return (free_all(a), free_all_array(tab, length),
-				write(2, "Error\n", 6));
+			return (-1);
 		free_all_array(tab, length);
 		tab = ft_split(argv[++i], ' ');
 		if (tab)
@@ -61,13 +60,9 @@ then sort stack a in main sort_argorithm func
 later free everything so no leaks*/
 int	push_swap(int argc, char **argv, t_Node **a)
 {
-	int		i;
 	char	**tab;
 	int		length;
-	int		j;
 
-	i = 1;
-	j = 0;
 	if (argc < 2)
 		return (0);
 	tab = ft_split(argv[1], ' ');
@@ -78,10 +73,11 @@ int	push_swap(int argc, char **argv, t_Node **a)
 	if (argc + length == 3 || argc + length == 2)
 	{
 		if (is_valid_input(tab[0]) == 0)
-			return (free_all_array(tab, length), write(2, "Error\n", 6));
+			return (free_all_array(tab, length), -1);
 	}
 	else
-		init_list(a, argc, argv, tab);
+		if (init_list(a, argc, argv, tab) == -1)
+			return (free_all_array(tab, length), -1);
 	if (tab)
 		free_all_array(tab, length);
 	return (0);
@@ -91,12 +87,18 @@ int	main(int argc, char **argv)
 {
 	t_Node	*a;
 	t_Node	*b;
+	int		max_rotate;
 
 	a = NULL;
 	b = NULL;
-	push_swap(argc, argv, &a);
+	if (push_swap(argc, argv, &a) == -1)
+		return (free_all(&a), write(2, "Error\n", 6));
+	if (a != NULL && numbers_on_stack(&a) > 250)
+		max_rotate = 15;
+	else
+		max_rotate = 7;
 	if (is_sorted(&a) == 2)
-		sort_algorithm(&a, &b, numbers_on_stack(&a));
+		sort_algorithm(&a, &b, numbers_on_stack(&a), max_rotate);
 	while (b != NULL)
 		push_a(&a, &b);
 	free_all(&a);

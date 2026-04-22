@@ -12,7 +12,7 @@
 
 #include "push_swap.h"
 
-static int	check_start_position_helper(t_Node **stack, int min_value)
+int	check_start_position_helper(t_Node **stack, int min_value)
 {
 	t_Node	*start;
 	int		best_value;
